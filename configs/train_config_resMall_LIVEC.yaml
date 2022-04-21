@@ -1,0 +1,54 @@
+model:
+    type: "ResnetMulFeatureWeightNet"
+    pretrained: True
+dataset:
+    train:
+        type: "CustomDatabase"
+        IQA_type: "NR"
+        nor_value: 100
+        img_info_file: "xxx.txt"
+        dis_img_path: "/home/hxm/IPOID_IQA/IQAtrain/ori_database/LIVEC/Images/"
+        IQA_transforms:
+           - type: "default_loader2"
+             IQA_type: "NR"
+           - type: "RandomVerticleFlip"
+           - type: "RandomHorizontalFlip"
+           - type: "RandomRotate90"
+           - type: "Resize"
+             IQA_type: "NR"
+             img_size: [500,500]
+           - type: "ToTensor"
+             IQA_type: "NR"
+    val:
+        type: "CustomDatabase"
+        IQA_type: "NR"
+        nor_value: 100
+        img_info_file: "xxx.txt"
+        dis_img_path: "/home/hxm/IPOID_IQA/IQAtrain/ori_database/LIVEC/Images/"
+        IQA_transforms:
+           - type: "default_loader2"
+             IQA_type: "NR"
+           - type: "ToTensor"
+             IQA_type: "NR"
+
+train_config:
+   train_batch_size: 16
+   val_batch_size: 1
+   epoch: 120
+   save_epoch: 60
+   val_epoch: 1
+   log_iter: 50
+   checkpoint_dir: "path"
+
+optimizer:
+   type: "Adam"
+   lr: 0.0001
+
+lr_scheduler:
+   type: "StepLR"
+   step_size: 60
+   gamma: 0.1
+loss:
+   type: "L1Loss"
+   reduction: 'mean'
+gpu_ids: [8]

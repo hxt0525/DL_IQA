@@ -1,0 +1,56 @@
+model:
+    type: "EfficientB2MulFeatureWeightNetMall"
+    pretrained: False
+dataset:
+    train:
+        type: "CustomDatabase"
+        IQA_type: "NR"
+        nor_value: 100
+        img_info_file: "label_split/test/test_ddp.txt"
+        dis_img_path: "/home/hxm/IPOID_IQA/IQAtrain/ori_database/LIVEC/Images/"
+        IQA_transforms:
+           - type: "default_loader2"
+             IQA_type: "NR"
+           - type: "RandomVerticleFlip"
+           - type: "RandomHorizontalFlip"
+           - type: "RandomRotate90"
+           - type: "Resize"
+             IQA_type: "NR"
+             img_size: [500,500]
+           - type: "ToTensor"
+             IQA_type: "NR"
+    val:
+        type: "CustomDatabase"
+        IQA_type: "NR"
+        nor_value: 100
+        img_info_file: "label_split/test/test_ddp.txt"
+        dis_img_path: "/home/hxm/IPOID_IQA/IQAtrain/ori_database/LIVEC/Images/"
+        IQA_transforms:
+           - type: "default_loader2"
+             IQA_type: "NR"
+           - type: "ToTensor"
+             IQA_type: "NR"
+
+train_config:
+   train_batch_size: 2
+   val_batch_size: 1
+   epoch: 120
+   save_epoch: 60
+   val_epoch: 1
+   log_iter: 1
+   checkpoint_dir: "test_out_dir"
+
+optimizer:
+   type: "Adam"
+   lr: 0.0001
+
+lr_scheduler:
+   type: "GradualWarmupSchedulerStepLR"
+   multiplier: 100
+   total_epoch: 4
+   step_size: 5
+   gamma: 0.1
+loss:
+   type: "L1Loss"
+   reduction: 'mean'
+gpu_ids: [5]

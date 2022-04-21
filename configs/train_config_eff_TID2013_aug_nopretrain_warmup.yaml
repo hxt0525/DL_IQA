@@ -1,0 +1,55 @@
+model:
+    type: "EfficientB2MulFeatureWeightNet"
+    pretrained: False
+dataset:
+    train:
+        type: "CustomDatabase"
+        IQA_type: "NR"
+        nor_value: 1
+        img_info_file: "xxx.txt"
+        dis_img_path: "/home/hxm/IPOID_IQA/TID2013training/crop128_stride64"
+        IQA_transforms:
+           - type: "default_loader2"
+             IQA_type: "NR"
+           - type: "RandomVerticleFlip"
+           - type: "RandomHorizontalFlip"
+           - type: "RandomRotate90"
+           - type: "ToTensor"
+             IQA_type: "NR"
+    val:
+        type: "CustomDatabase"
+        IQA_type: "NR"
+        nor_value: 1
+        img_info_file: "xxx.txt"
+        dis_img_path: "/home/hxm/IPOID_IQA/TID2013/distorted_images"
+        IQA_transforms:
+           - type: "default_loader2"
+             IQA_type: "NR"
+           - type: "ToTensor"
+             IQA_type: "NR"
+
+train_config:
+   train_batch_size: 256
+   val_batch_size: 1
+   epoch: 50
+   save_epoch: 20
+   val_epoch: 1
+   log_iter: 150
+   checkpoint_dir: "path"
+
+optimizer:
+   type: "Adam"
+   lr: 0.0001
+
+
+lr_scheduler:
+   type: "GradualWarmupSchedulerStepLR"
+   multiplier: 100
+   total_epoch: 4
+   step_size: 4
+   gamma: 0.75
+
+loss:
+   type: "L1Loss"
+   reduction: 'mean'
+gpu_ids: [6]

@@ -1,0 +1,44 @@
+model:
+    type: "EfficientB2MulFeatureWeightNet"
+    pretrained: True
+dataset:
+    train:
+        type: "CustomDatabase"
+        IQA_type: "NR"
+        nor_value: 1
+        img_info_file: "xxx.txt"
+        dis_img_path: "/home/hxm/IPOID_IQA/IQAtrain/crop_database/CSIQ/crop128_stride64"
+        IQA_transforms:
+           - type: "default_loader2"
+             IQA_type: "NR"
+           - type: "ToTensor"
+             IQA_type: "NR"
+    val:
+        type: "CustomDatabase"
+        IQA_type: "NR"
+        nor_value: 1
+        img_info_file: "xxx.txt"
+        dis_img_path: "/home/hxm/IPOID_IQA/IQAtrain/ori_database/CSIQ/dst_imgs/"
+        IQA_transforms:
+           - type: "default_loader2"
+             IQA_type: "NR"
+           - type: "ToTensor"
+             IQA_type: "NR"
+
+train_config:
+   train_batch_size: 128
+   val_batch_size: 1
+   epoch: 40
+   save_epoch: 15
+   val_epoch: 1
+   log_iter: 100
+   checkpoint_dir: "path"
+
+optimizer:
+   type: "Adam"
+   lr: 0.001
+
+loss:
+   type: "L1Loss"
+   reduction: 'mean'
+gpu_ids: [1,7]
